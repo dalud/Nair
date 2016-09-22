@@ -31,7 +31,7 @@ public class NairMain extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		hoglin.anim(1);
+		hoglin.move();
 		hoglin.draw(batch);
 		batch.end();
 	}

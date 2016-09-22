@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 
 import static discordia.nair.NairMain.scale;
 
@@ -13,19 +14,28 @@ import static discordia.nair.NairMain.scale;
  */
 
 public class Hoglin {
-    private Texture idle;
     private TextureRegion currentFrame;
     int state;
     float stateTime;
 
     public void Hoglin(){
-        idle = new Texture(Gdx.files.internal("Hoglin/Hoglin_front.png"));
         state = 0;
         stateTime = 0;
-        currentFrame = new TextureRegion(idle);
     }
     public void draw(SpriteBatch batch) {
         batch.draw(currentFrame, 1280/4/2-29, 720/4/2-29/*(NairMain.resoX/ scale)/2-idle.getWidth()/2 , (NairMain.resoY/scale)/2-idle.getHeight()/2*/);
+    }
+    public void move(){
+        if(Gdx.input.isTouched()) {
+            if(Gdx.input.getX()<365) this.anim(2);
+            else if(Gdx.input.getX()>365 && Gdx.input.getX()<914){
+                if(Gdx.input.getY()<360) this.anim(1);
+                else this.anim(3);
+            }
+            else if(Gdx.input.getX()>914) this.anim(4);
+
+        }
+        else this.anim(0);
     }
     public void anim(int state) {
         this.state = state;
@@ -34,14 +44,14 @@ public class Hoglin {
         float tick = Gdx.graphics.getDeltaTime();
 
         Animation anim;
-        Texture animSheet = idle;
+        Texture animSheet = new Texture("Hoglin/Hoglin_idle.png");
         TextureRegion[] animFrames;
 
-        if(state==0) animSheet = idle;
-        if(state==1) animSheet = new Texture(Gdx.files.internal("Hoglin/Hoglin_walkBack.png"));
-        if(state==2) animSheet = new Texture(Gdx.files.internal("Hoglin/Hoglin_walkLeft.png"));
-        if(state==3) animSheet = new Texture(Gdx.files.internal("Hoglin/Hoglin_walkFront.png"));
-        if(state==4) animSheet = new Texture(Gdx.files.internal("Hoglin/Hoglin_walkRight.png"));
+        if(state==0) animSheet = new Texture("Hoglin/Hoglin_idle.png");
+        if(state==1) animSheet = new Texture("Hoglin/Hoglin_walkBack.png");
+        if(state==2) animSheet = new Texture("Hoglin/Hoglin_walkLeft.png");
+        if(state==3) animSheet = new Texture("Hoglin/Hoglin_walkFront.png");
+        if(state==4) animSheet = new Texture("Hoglin/Hoglin_walkRight.png");
 
         TextureRegion[][] tmp = TextureRegion.split(animSheet, animSheet.getWidth()/frame_cols, animSheet.getHeight()/frame_rows);
         animFrames = new TextureRegion[frame_cols * frame_rows];
@@ -51,7 +61,7 @@ public class Hoglin {
                 animFrames[index++] = tmp[i][j];
             }
         }
-        anim = new Animation(0.075f, animFrames);
+        anim = new Animation(0.2f, animFrames);
         stateTime += tick;
         currentFrame = anim.getKeyFrame(stateTime, true);
     }
