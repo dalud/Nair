@@ -11,7 +11,7 @@ public class NairMain extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 	private OrthographicCamera camera;
-	static int scale = 4;
+	static int scale = 5;
 	static int resoX = 1280;
 	static int resoY = 720;
 	Hoglin hoglin;

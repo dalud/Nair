@@ -23,7 +23,7 @@ public class Hoglin {
         stateTime = 0;
     }
     public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, 1280/4/2-29, 720/4/2-29/*(NairMain.resoX/ scale)/2-idle.getWidth()/2 , (NairMain.resoY/scale)/2-idle.getHeight()/2*/);
+        batch.draw(currentFrame, NairMain.resoX/NairMain.scale/2-currentFrame.getRegionWidth()/2, NairMain.resoY/NairMain.scale/2-currentFrame.getRegionHeight()/2);
     }
     public void move(){
         if(Gdx.input.isTouched()) {
