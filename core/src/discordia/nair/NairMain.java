@@ -4,12 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class NairMain extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
 	private OrthographicCamera camera;
 	static int scale = 5;
 	static int resoX = 1280;
