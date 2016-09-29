@@ -18,7 +18,7 @@ public class Hoglin {
     int state;
     float stateTime;
 
-    public void Hoglin(){
+    public Hoglin(){
         state = 0;
         stateTime = 0;
     }
