@@ -1,6 +1,7 @@
 package discordia.nair;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,13 +18,15 @@ public class Hoglin {
     private TextureRegion currentFrame;
     int state;
     float stateTime;
+    OrthographicCamera camera;
 
-    public Hoglin(){
+    public Hoglin(OrthographicCamera camera){
+        this.camera = camera;
         state = 0;
         stateTime = 0;
     }
     public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, NairMain.resoX/NairMain.scale/2-currentFrame.getRegionWidth()/2, NairMain.resoY/NairMain.scale/2-currentFrame.getRegionHeight()/2);
+        batch.draw(currentFrame, camera.viewportWidth/2f-32, camera.viewportHeight/2f-32);
     }
     public void move(){
         if(Gdx.input.isTouched()) {
