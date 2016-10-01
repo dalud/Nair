@@ -17,25 +17,38 @@ import static discordia.nair.NairMain.scale;
 public class Hoglin {
     private TextureRegion currentFrame;
     int state;
-    float stateTime;
+    float stateTime, speed;
     OrthographicCamera camera;
 
     public Hoglin(OrthographicCamera camera){
         this.camera = camera;
         state = 0;
         stateTime = 0;
+        speed = .8f;
     }
     public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, camera.viewportWidth/2f-32, camera.viewportHeight/2f-32);
+        batch.draw(currentFrame, camera.position.x - 32, camera.position.y - 32);
     }
     public void move(){
         if(Gdx.input.isTouched()) {
-            if(Gdx.input.getX()<365) this.anim(2);
-            else if(Gdx.input.getX()>365 && Gdx.input.getX()<914){
-                if(Gdx.input.getY()<360) this.anim(1);
-                else this.anim(3);
+            if(Gdx.input.getX()<365) {
+                this.anim(2);
+                camera.translate(-speed, 0);
             }
-            else if(Gdx.input.getX()>914) this.anim(4);
+            else if(Gdx.input.getX()>365 && Gdx.input.getX()<914){
+                if(Gdx.input.getY()<360) {
+                    this.anim(1);
+                    camera.translate(0, +speed);
+                }
+                else {
+                    this.anim(3);
+                    camera.translate(0, -speed);
+                }
+            }
+            else if(Gdx.input.getX()>914) {
+                this.anim(4);
+                camera.translate(+speed, 0);
+            }
 
         }
         else this.anim(0);
@@ -64,7 +77,7 @@ public class Hoglin {
                 animFrames[index++] = tmp[i][j];
             }
         }
-        anim = new Animation(0.2f, animFrames);
+        anim = new Animation(0.125f, animFrames);
         stateTime += tick;
         currentFrame = anim.getKeyFrame(stateTime, true);
     }
