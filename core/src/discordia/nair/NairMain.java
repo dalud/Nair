@@ -23,7 +23,7 @@ public class NairMain extends ApplicationAdapter {
 		float h = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		camera.position.set(camera.viewportWidth/2f, camera.viewportHeight/2f, 0);
+		camera.position.set(300, 400, 0);
 		hoglin = new Hoglin(camera);
 		YigL1 = new Texture(Gdx.files.internal("ForestOfYig/mapL1.png"));
 		YigL2 = new Texture(Gdx.files.internal("ForestOfYig/mapL2.png"));

@@ -17,44 +17,52 @@ import static discordia.nair.NairMain.scale;
 public class Hoglin {
     private TextureRegion currentFrame;
     int state;
-    float stateTime, speed;
+    float stateTime, moveSpeed, runAnimSpeed, idleAnimSpeed, frameT;
     OrthographicCamera camera;
 
     public Hoglin(OrthographicCamera camera){
         this.camera = camera;
-        state = 0;
+
         stateTime = 0;
-        speed = .8f;
+        moveSpeed = 1.1f;
+        runAnimSpeed = .125f;
+        idleAnimSpeed = .35f;
     }
     public void draw(SpriteBatch batch) {
         batch.draw(currentFrame, camera.position.x - 32, camera.position.y - 32);
     }
     public void move(){
         if(Gdx.input.isTouched()) {
+            frameT = runAnimSpeed;
+
             if(Gdx.input.getX()<365) {
                 this.anim(2);
-                camera.translate(-speed, 0);
+                camera.translate(-moveSpeed, 0);
             }
             else if(Gdx.input.getX()>365 && Gdx.input.getX()<914){
                 if(Gdx.input.getY()<360) {
                     this.anim(1);
-                    camera.translate(0, +speed);
+                    camera.translate(0, +moveSpeed);
                 }
                 else {
                     this.anim(3);
-                    camera.translate(0, -speed);
+                    camera.translate(0, -moveSpeed);
                 }
             }
             else if(Gdx.input.getX()>914) {
                 this.anim(4);
-                camera.translate(+speed, 0);
+                camera.translate(+moveSpeed, 0);
             }
 
         }
-        else this.anim(0);
+        else {
+            frameT = idleAnimSpeed;
+            this.anim(0);
+        }
     }
     public void anim(int state) {
-        this.state = state;
+
+
         int frame_cols = 4;
         int frame_rows = 1;
         float tick = Gdx.graphics.getDeltaTime();
@@ -77,7 +85,7 @@ public class Hoglin {
                 animFrames[index++] = tmp[i][j];
             }
         }
-        anim = new Animation(0.125f, animFrames);
+        anim = new Animation(frameT, animFrames);
         stateTime += tick;
         currentFrame = anim.getKeyFrame(stateTime, true);
     }
