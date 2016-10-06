@@ -6,23 +6,33 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-
-import static discordia.nair.NairMain.scale;
 
 /**
- * Created by jaakk_000 on 22.9.2016.
+ * Created by dalud on 22.9.2016.
  */
 
 public class Hoglin {
     private TextureRegion currentFrame;
-    int state;
+    private Texture idle, walkBack, walkLeft, walkFront, walkRight;
     float stateTime, moveSpeed, runAnimSpeed, idleAnimSpeed, frameT;
     OrthographicCamera camera;
+    enum State {    IDLE,
+                    WALK_BACK,
+                    WALK_LEFT,
+                    WALK_FRONT,
+                    WALK_RIGHT
+                                }
+    private State state;
 
     public Hoglin(OrthographicCamera camera){
         this.camera = camera;
+        idle = new Texture("Hoglin/Hoglin_idle.png");
+        walkBack = new Texture("Hoglin/Hoglin_walkBack.png");
+        walkLeft = new Texture("Hoglin/Hoglin_walkLeft.png");
+        walkFront = new Texture("Hoglin/Hoglin_walkFront.png");
+        walkRight = new Texture("Hoglin/Hoglin_walkRight.png");
 
+        state = State.IDLE;
         stateTime = 0;
         moveSpeed = 1.1f;
         runAnimSpeed = .125f;
@@ -36,31 +46,36 @@ public class Hoglin {
             frameT = runAnimSpeed;
 
             if(Gdx.input.getX()<365) {
-                this.anim(2);
+                state = State.WALK_LEFT;
+                this.anim();
                 camera.translate(-moveSpeed, 0);
             }
             else if(Gdx.input.getX()>365 && Gdx.input.getX()<914){
                 if(Gdx.input.getY()<360) {
-                    this.anim(1);
+                    state = State.WALK_BACK;
+                    this.anim();
                     camera.translate(0, +moveSpeed);
                 }
                 else {
-                    this.anim(3);
+                    state = State.WALK_FRONT;
+                    this.anim();
                     camera.translate(0, -moveSpeed);
                 }
             }
             else if(Gdx.input.getX()>914) {
-                this.anim(4);
+                state = State.WALK_RIGHT;
+                this.anim();
                 camera.translate(+moveSpeed, 0);
             }
 
         }
         else {
             frameT = idleAnimSpeed;
-            this.anim(0);
+            state = State.IDLE;
+            this.anim();
         }
     }
-    public void anim(int state) {
+    public void anim() {
 
 
         int frame_cols = 4;
@@ -71,11 +86,11 @@ public class Hoglin {
         Texture animSheet = new Texture("Hoglin/Hoglin_idle.png");
         TextureRegion[] animFrames;
 
-        if(state==0) animSheet = new Texture("Hoglin/Hoglin_idle.png");
-        if(state==1) animSheet = new Texture("Hoglin/Hoglin_walkBack.png");
-        if(state==2) animSheet = new Texture("Hoglin/Hoglin_walkLeft.png");
-        if(state==3) animSheet = new Texture("Hoglin/Hoglin_walkFront.png");
-        if(state==4) animSheet = new Texture("Hoglin/Hoglin_walkRight.png");
+        if(state == State.IDLE) animSheet = idle;
+        if(state == State.WALK_BACK) animSheet = walkBack;
+        if(state == State.WALK_LEFT) animSheet = walkLeft;
+        if(state == State.WALK_FRONT) animSheet = walkFront;
+        if(state == State.WALK_RIGHT) animSheet = walkRight;
 
         TextureRegion[][] tmp = TextureRegion.split(animSheet, animSheet.getWidth()/frame_cols, animSheet.getHeight()/frame_rows);
         animFrames = new TextureRegion[frame_cols * frame_rows];
