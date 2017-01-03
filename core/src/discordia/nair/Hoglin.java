@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hoglin {
     private TextureRegion currentFrame;
+    Texture idle, walkBack, walkFront, walkLeft, walkRight;
     float stateTime, moveSpeed, runAnimSpeed, idleAnimSpeed, frameT, diagSpeed;
     OrthographicCamera camera;
     int state = 0;
@@ -24,6 +25,11 @@ public class Hoglin {
         runAnimSpeed = .125f;
         idleAnimSpeed = .35f;
         diagSpeed = .73f;
+        idle = new Texture("Hoglin/Hoglin_idle.png");
+        walkBack = new Texture("Hoglin/Hoglin_walkBack.png");
+        walkFront = new Texture("Hoglin/Hoglin_walkFront.png");
+        walkLeft = new Texture("Hoglin/Hoglin_walkLeft.png");
+        walkRight = new Texture("Hoglin/Hoglin_walkRight.png");
     }
     public void draw(SpriteBatch batch) {
         batch.draw(currentFrame, camera.position.x - 32, camera.position.y - 32);
@@ -71,24 +77,24 @@ public class Hoglin {
         float tick = Gdx.graphics.getDeltaTime();
 
         Animation anim;
-        Texture animSheet = new Texture("Hoglin/Hoglin_idle.png");
+        Texture animSheet = idle;
         TextureRegion[] animFrames;
 
         switch(state){
             case 0:
-                animSheet = new Texture("Hoglin/Hoglin_idle.png");
+                animSheet = idle;
                 break;
             case 1:
-                animSheet = new Texture("Hoglin/Hoglin_walkBack.png");
+                animSheet = walkBack;
                 break;
             case 3:case 2:case 4:
-                animSheet = new Texture("Hoglin/Hoglin_walkRight.png");
+                animSheet = walkRight;
                 break;
             case 5:
-                animSheet = new Texture("Hoglin/Hoglin_walkFront.png");
+                animSheet = walkFront;
                 break;
             case 7:case 8: case 6:
-                animSheet = new Texture("Hoglin/Hoglin_walkLeft.png");
+                animSheet = walkLeft;
                 break;
         }
 
