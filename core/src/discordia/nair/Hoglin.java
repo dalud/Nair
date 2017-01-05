@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by Dalud on 22.9.2016.
@@ -13,72 +14,52 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hoglin {
     private TextureRegion currentFrame;
-    Texture idle, walkBack, walkFront, walkLeft, walkRight;
-    float stateTime, moveSpeed, runAnimSpeed, idleAnimSpeed, frameT, diagSpeed;
+    Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
+    float stateTime, moveSpeed, idleAnimSpeed, frameT;
     OrthographicCamera camera;
     int state = 0;
 
     public Hoglin(OrthographicCamera camera){
         this.camera = camera;
         stateTime = 0;
-        moveSpeed = 1.1f;
-        runAnimSpeed = .125f;
-        idleAnimSpeed = .35f;
-        diagSpeed = .73f;
+        moveSpeed = 2f;
+        idleAnimSpeed = .5f;
+
         idle = new Texture("Hoglin/Hoglin_idle.png");
         walkBack = new Texture("Hoglin/Hoglin_walkBack.png");
         walkFront = new Texture("Hoglin/Hoglin_walkFront.png");
         walkLeft = new Texture("Hoglin/Hoglin_walkLeft.png");
         walkRight = new Texture("Hoglin/Hoglin_walkRight.png");
+        animSheet = idle;
     }
     public void draw(SpriteBatch batch) {
         batch.draw(currentFrame, camera.position.x - 32, camera.position.y - 32);
     }
-    public void move(int state){
+    public void move(Vector2 direction){
 
-        this.state = state;
+        float x = direction.x;
+        float y = direction.y;
 
-        if(state != 0) frameT = runAnimSpeed;
-        else frameT = idleAnimSpeed;
-
-        switch(state){
-                case 1:
-                    camera.translate(0, +moveSpeed);
-                    break;
-                case 2:
-                    camera.translate(+moveSpeed*diagSpeed, +moveSpeed*diagSpeed);
-                    break;
-                case 3:
-                    camera.translate(+moveSpeed, 0);
-                    break;
-                case 4:
-                    camera.translate(+moveSpeed*diagSpeed, -moveSpeed*diagSpeed);
-                    break;
-                case 5:
-                    camera.translate(0, -moveSpeed);
-                    break;
-                case 6:
-                    camera.translate(-moveSpeed*diagSpeed, -moveSpeed*diagSpeed);
-                    break;
-                case 7:
-                    camera.translate(-moveSpeed, 0);
-                    break;
-                case 8:
-                    camera.translate(-moveSpeed*diagSpeed, +moveSpeed*diagSpeed);
-            }
-
-        this.anim(state);
-    }
-
-    public void anim(int state) {
-
-        int frame_cols = 4;
-        int frame_rows = 1;
-        float tick = Gdx.graphics.getDeltaTime();
-
-        Animation anim;
-        Texture animSheet = idle;
-        TextureRegion[] animFrames;
+        //TÄSSÄ TSEKATAAN SUUNTA JA MÄÄRÄTÄÄN ANIMSHEETTI SEN MUKAAN
+        if(x>0 && y>=0){
+            if(x > y) state = 2;
+            else state = 1;
+        }
+        else if(x>=0 && y<0){
+            y = -y;
+            if(x > y) state = 2;
+            else state = 3;
+        }
+        else if(x<0 && y<=0){
+            if(x < y) state = 4;
+            else state = 3;
+        }
+        else if(x<=0 && y>0){
+            x = -x;
+            if(x > y) state = 4;
+            else state = 1;
+        }
+        else state = 0;
 
         switch(state){
             case 0:
@@ -87,16 +68,32 @@ public class Hoglin {
             case 1:
                 animSheet = walkBack;
                 break;
-            case 3:case 2:case 4:
+            case 2:
                 animSheet = walkRight;
                 break;
-            case 5:
+            case 3:
                 animSheet = walkFront;
                 break;
-            case 7:case 8: case 6:
+            case 4:
                 animSheet = walkLeft;
                 break;
         }
+        this.anim(direction, animSheet);
+        camera.translate(direction.x/16*moveSpeed, direction.y/9*moveSpeed);
+    }
+
+    public void anim(Vector2 direction, Texture animSheet) {
+
+        int frame_cols = 4;
+        int frame_rows = 1;
+        float tick = Gdx.graphics.getDeltaTime();
+
+        Animation anim;
+
+        TextureRegion[] animFrames;
+
+        //TÄSSÄ MÄÄRÄTÄÄN ANIMMATION NOPEUS LIIKEVEKTORIN MUKAAN
+        frameT = idleAnimSpeed - direction.len()/9*idleAnimSpeed;
 
         TextureRegion[][] tmp = TextureRegion.split(animSheet, animSheet.getWidth()/frame_cols, animSheet.getHeight()/frame_rows);
         animFrames = new TextureRegion[frame_cols * frame_rows];

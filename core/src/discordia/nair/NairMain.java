@@ -17,7 +17,6 @@ public class NairMain extends ApplicationAdapter {
 	Texture YigL1, YigL2;
 	MyInput input;
 
-
 	@Override
 	public void create () {
 		resoX = Gdx.graphics.getWidth();
@@ -28,7 +27,7 @@ public class NairMain extends ApplicationAdapter {
 		hoglin = new Hoglin(camera);
 		YigL1 = new Texture(Gdx.files.internal("ForestOfYig/mapL1.png"));
 		YigL2 = new Texture(Gdx.files.internal("ForestOfYig/mapL2.png"));
-		input = new MyInput(resoX, resoY, hoglin);
+		input = new MyInput(resoX/resoX*16, resoY/resoY*9, hoglin);
 		Gdx.input.setInputProcessor(input);
 	}
 
