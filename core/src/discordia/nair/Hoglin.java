@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Dalud on 22.9.2016.
  */
@@ -17,13 +19,15 @@ public class Hoglin {
     Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
     float stateTime, moveSpeed, idleAnimSpeed, frameT;
     OrthographicCamera camera;
-    int state = 0;
+    int state;
+    DecimalFormat df = new DecimalFormat("0.0");
 
     public Hoglin(OrthographicCamera camera){
         this.camera = camera;
         stateTime = 0;
-        moveSpeed = 2f;
-        idleAnimSpeed = .5f;
+        moveSpeed = 3f;
+        idleAnimSpeed = .4f;
+        state = 0;
 
         idle = new Texture("Hoglin/Hoglin_idle.png");
         walkBack = new Texture("Hoglin/Hoglin_walkBack.png");
@@ -77,7 +81,8 @@ public class Hoglin {
             case 4:
                 animSheet = walkLeft;
                 break;
-        }
+        }       
+
         this.anim(direction, animSheet);
         camera.translate(direction.x/16*moveSpeed, direction.y/9*moveSpeed);
     }
@@ -93,7 +98,8 @@ public class Hoglin {
         TextureRegion[] animFrames;
 
         //TÄSSÄ MÄÄRÄTÄÄN ANIMMATION NOPEUS LIIKEVEKTORIN MUKAAN
-        frameT = idleAnimSpeed - direction.len()/9*idleAnimSpeed;
+        frameT = Float.parseFloat(df.format(idleAnimSpeed - (direction.len()/9*idleAnimSpeed)));
+        if(frameT < .1) frameT = .1f;
 
         TextureRegion[][] tmp = TextureRegion.split(animSheet, animSheet.getWidth()/frame_cols, animSheet.getHeight()/frame_rows);
         animFrames = new TextureRegion[frame_cols * frame_rows];

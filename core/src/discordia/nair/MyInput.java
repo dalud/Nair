@@ -26,6 +26,15 @@ public class MyInput implements InputProcessor {
         player.move(direction);
     }
 
+
+    public Vector2 getDirection(int x, int y){
+
+        direction.x = x*16/Gdx.graphics.getWidth() - width/2 +.5f;
+        direction.y = -y*9/Gdx.graphics.getHeight() + height/2;
+
+        return direction;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         return false;
@@ -46,9 +55,7 @@ public class MyInput implements InputProcessor {
 
         finger++;
 
-        //TÄSSÄ ANNETAAN LIIKEVEKTORIN KOMPONENTIT TOUCHIN MUKAISESTI
-        direction.x = screenX*16/Gdx.graphics.getWidth() - width/2 +.5f;
-        direction.y = -screenY*9/Gdx.graphics.getHeight() + height/2;
+        getDirection(screenX, screenY);
 
         return false;
     }
@@ -69,9 +76,7 @@ public class MyInput implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        //SAMA HOMMA KU TOUCHDOWN (TUPLAKOODIA! HOW ABOUT A NEW FUNCTION?)
-        direction.x = screenX*16/Gdx.graphics.getWidth() - width/2 +.5f;
-        direction.y = -screenY*9/Gdx.graphics.getHeight() + height/2;
+        getDirection(screenX, screenY);
 
         return false;
     }
