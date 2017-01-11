@@ -2,6 +2,7 @@ package discordia.nair;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -12,7 +13,7 @@ public class MyInput implements InputProcessor {
 
     int width, height, state, finger;
     Hoglin player;
-    Vector2 direction;
+    Vector2 direction, confirmed;
 
     public MyInput(int width, int height, Hoglin player){
         this.width = width;
@@ -22,8 +23,9 @@ public class MyInput implements InputProcessor {
         direction = new Vector2(0, 0);
     }
 
-    public void Poll(){
-        player.move(direction);
+    public void poll(Level level, OrthographicCamera camera){
+        confirmed = level.collide(camera, direction);
+        player.move(confirmed);
     }
 
 

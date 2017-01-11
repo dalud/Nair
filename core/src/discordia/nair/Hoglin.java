@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 /**
  * Created by Dalud on 22.9.2016.
@@ -20,6 +21,9 @@ public class Hoglin {
     float stateTime, moveSpeed, idleAnimSpeed, frameT;
     OrthographicCamera camera;
     int state;
+
+    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+
     DecimalFormat df = new DecimalFormat("0.0");
 
     public Hoglin(OrthographicCamera camera){
@@ -28,6 +32,8 @@ public class Hoglin {
         moveSpeed = 3f;
         idleAnimSpeed = .4f;
         state = 0;
+        dfs.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(dfs);
 
         idle = new Texture("Hoglin/Hoglin_idle.png");
         walkBack = new Texture("Hoglin/Hoglin_walkBack.png");
@@ -37,7 +43,7 @@ public class Hoglin {
         animSheet = idle;
     }
     public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, camera.position.x - 32, camera.position.y - 32);
+        batch.draw(currentFrame, camera.position.x - 29, camera.position.y - 29);
     }
     public void move(Vector2 direction){
 
@@ -97,7 +103,7 @@ public class Hoglin {
 
         TextureRegion[] animFrames;
 
-        //TÄSSÄ MÄÄRÄTÄÄN ANIMMATION NOPEUS LIIKEVEKTORIN MUKAAN
+        //TÄSSÄ MÄÄRÄTÄÄN ANIMAATION NOPEUS LIIKEVEKTORIN MUKAAN
         frameT = Float.parseFloat(df.format(idleAnimSpeed - (direction.len()/9*idleAnimSpeed)));
         if(frameT < .1) frameT = .1f;
 

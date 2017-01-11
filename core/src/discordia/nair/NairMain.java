@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class NairMain extends ApplicationAdapter {
@@ -14,8 +13,8 @@ public class NairMain extends ApplicationAdapter {
 	static int resoX;
 	static int resoY;
 	Hoglin hoglin;
-	Texture YigL1, YigL2;
 	MyInput input;
+	Level level;
 
 	@Override
 	public void create () {
@@ -25,22 +24,21 @@ public class NairMain extends ApplicationAdapter {
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
 		camera.position.set(300, 400, 0);
 		hoglin = new Hoglin(camera);
-		YigL1 = new Texture(Gdx.files.internal("ForestOfYig/mapL1.png"));
-		YigL2 = new Texture(Gdx.files.internal("ForestOfYig/mapL2.png"));
 		input = new MyInput(resoX/resoX*16, resoY/resoY*9, hoglin);
 		Gdx.input.setInputProcessor(input);
+		level = new Level(batch);
 	}
 
 	@Override
 	public void render () {
 		camera.update();
-		input.Poll();
+		input.poll(level, camera);
 		batch.setProjectionMatrix(camera.combined);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(YigL1, 0, 0);
+		level.draw(1);
 		hoglin.draw(batch);
-		batch.draw(YigL2, 0, 0);
+		level.draw(2);
 		batch.end();
 	}
 }
