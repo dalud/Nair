@@ -16,17 +16,19 @@ public class Level {
     SpriteBatch batch;
     Pixmap obstacles;
     Vector2 confirmed;
-    int playerSize;
+    int playerDimensionX, playerDimensionY, playerDimensionYPositive;
 
     public Level(SpriteBatch batch){
 
-        YigL1 = new Texture(Gdx.files.internal("ForestOfYig/mapL1.png"));
-        YigL2 = new Texture(Gdx.files.internal("ForestOfYig/mapL2.png"));
+        YigL1 = new Texture(Gdx.files.internal("ForestOfYig/FoYL1.png"));
+        YigL2 = new Texture(Gdx.files.internal("ForestOfYig/FoYL2.png"));
         this.batch = batch;
         obstacles = new Pixmap(Gdx.files.internal("ForestOfYig/collision.png"));
-        playerSize = 32;
-
+        playerDimensionX = 10;
+        playerDimensionY = 16;
+        playerDimensionYPositive = 1;
     }
+
     public void draw(int layer){
 
         switch(layer){
@@ -64,34 +66,34 @@ public class Level {
         //TÄSSÄ ITSE KOLLISIO STATEN/SUUNNAN MUKAAN
         switch(state) {
             case 1:
-                if (obstacles.getPixel(cx + playerSize, cy) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(cx + playerDimensionX, cy) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(cx, cy + playerSize) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(cx, cy + playerDimensionYPositive) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 2:
-                if (obstacles.getPixel(cx + playerSize, cy) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(cx + playerDimensionX, cy) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(cx, cy - playerSize) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(cx, cy - playerDimensionY) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 3:
-                if (obstacles.getPixel(cx - playerSize, cy) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(cx - playerDimensionX, cy) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(cx, cy - playerSize) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(cx, cy - playerDimensionY) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 4:
-                if (obstacles.getPixel(cx - playerSize, cy) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(cx - playerDimensionX, cy) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(cx, cy + playerSize) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(cx, cy + playerDimensionYPositive) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 

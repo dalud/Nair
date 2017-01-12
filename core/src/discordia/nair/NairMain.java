@@ -22,7 +22,7 @@ public class NairMain extends ApplicationAdapter {
 		resoY = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		camera.position.set(300, 400, 0);
+		camera.position.set(1400, 600, 0);
 		hoglin = new Hoglin(camera);
 		input = new MyInput(resoX/resoX*16, resoY/resoY*9, hoglin);
 		Gdx.input.setInputProcessor(input);
