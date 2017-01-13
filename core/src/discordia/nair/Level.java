@@ -1,6 +1,7 @@
 package discordia.nair;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,7 @@ public class Level {
     Pixmap obstacles;
     Vector2 confirmed;
     int playerDimensionX, playerDimensionY, playerDimensionYPositive;
+    Music bardic;
 
     public Level(SpriteBatch batch){
 
@@ -27,6 +29,9 @@ public class Level {
         playerDimensionX = 10;
         playerDimensionY = 16;
         playerDimensionYPositive = 1;
+        bardic = Gdx.audio.newMusic(Gdx.files.internal("music/Bardic.mp3"));
+        bardic.setLooping(true);
+        bardic.play();
     }
 
     public void draw(int layer){

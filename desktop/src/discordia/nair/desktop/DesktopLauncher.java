@@ -6,6 +6,7 @@ import discordia.nair.NairMain;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+		System.setProperty("user.name", "pelaaja");
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1280;
 		config.height = 720;
