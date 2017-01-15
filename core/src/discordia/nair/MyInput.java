@@ -27,7 +27,7 @@ public class MyInput implements InputProcessor {
     }
 
     public void poll(Level level){
-        player.move(level.collide(direction, player.posX, player.posY));
+        player.move(level.collide(direction, player.posX, player.posY, player.dimensions));
     }
 
 

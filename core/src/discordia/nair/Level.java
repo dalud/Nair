@@ -15,16 +15,13 @@ public class Level {
     Texture YigL1, YigL2;
     Pixmap obstacles;
     Vector2 confirmed;
-    int playerDimensionX, playerDimensionY, playerDimensionYPositive;
     Music bardic;
 
     public Level(){
         YigL1 = new Texture(Gdx.files.internal("ForestOfYig/FoYL1.png"));
         YigL2 = new Texture(Gdx.files.internal("ForestOfYig/FoYL2.png"));
         obstacles = new Pixmap(Gdx.files.internal("ForestOfYig/collision.png"));
-        playerDimensionX = 10;
-        playerDimensionY = 16;
-        playerDimensionYPositive = 1;
+
         bardic = Gdx.audio.newMusic(Gdx.files.internal("music/Bardic.mp3"));
         bardic.setLooping(true);
         bardic.play();
@@ -42,7 +39,7 @@ public class Level {
         }
     }
 
-    public Vector2 collide(Vector2 direction, int posX, int posY){
+    public Vector2 collide(Vector2 direction, int posX, int posY, int[] dims){
 
         int dx = Math.round(direction.x);
         int dy = Math.round(direction.y);
@@ -65,34 +62,34 @@ public class Level {
         //TÄSSÄ ITSE KOLLISIO STATEN/SUUNNAN MUKAAN
         switch(state) {
             case 1:
-                if (obstacles.getPixel(posX + playerDimensionX, posY) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(posX + dims[0], posY) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(posX, posY + playerDimensionYPositive) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(posX, posY + dims[2]) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 2:
-                if (obstacles.getPixel(posX + playerDimensionX, posY) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(posX + dims[0], posY) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(posX, posY - playerDimensionY) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(posX, posY - dims[1]) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 3:
-                if (obstacles.getPixel(posX - playerDimensionX, posY) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(posX - dims[0], posY) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(posX, posY - playerDimensionY) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(posX, posY - dims[1]) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 
             case 4:
-                if (obstacles.getPixel(posX - playerDimensionX, posY) < 1) confirmed.x = 0;
+                if (obstacles.getPixel(posX - dims[0], posY) < 1) confirmed.x = 0;
                 else confirmed.x = dx;
 
-                if (obstacles.getPixel(posX, posY + playerDimensionYPositive) < 1) confirmed.y = 0;
+                if (obstacles.getPixel(posX, posY + dims[2]) < 1) confirmed.y = 0;
                 else confirmed.y = dy;
                 break;
 

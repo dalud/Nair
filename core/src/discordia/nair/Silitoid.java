@@ -10,16 +10,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Silitoid extends Creature {
 
-    public Silitoid(){
+    public Silitoid() {
         idle = walkBack = walkFront = walkLeft = walkRight = new Texture(Gdx.files.internal("Silitoid/silitoid_idle.png"));
-        posX = 1300;
-        posY = 600;
+        posX = 700;
+        posY = 400;
         idleAnimSpeed = .3f;
+        moveSpeed = 3;
+        dimensions = new int[]{18, 1, 9};
     }
 
-    Vector2 direction = new Vector2(0, 0);
-
-    public void Operate(){
-        move(direction);
+    public void operate() {
+        move(new Vector2(0, 0));
     }
 }

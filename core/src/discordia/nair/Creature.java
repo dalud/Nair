@@ -19,22 +19,24 @@ public abstract class Creature {
     Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
     float stateTime, moveSpeed, idleAnimSpeed, frameT;
     int state, posX, posY;
+    int[] dimensions;   /*  0 = x
+                            1 = y
+                            2 = yPositive */
 
     DecimalFormatSymbols dfs = new DecimalFormatSymbols();
     DecimalFormat df = new DecimalFormat("0.0");
 
     public Creature(){
         stateTime = 0;
-        moveSpeed = 3f;
-        idleAnimSpeed = .4f;
         state = 0;
+        animSheet = idle;
+        dimensions = new int[3];
 
         //LOKALISAATIOSTA JOHTUVA IDIOT CHECK
         dfs.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(dfs);
-
-        animSheet = idle;
     }
+
     public void draw(SpriteBatch batch) {
         batch.draw(currentFrame, posX-32, posY-32);
     }
