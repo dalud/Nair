@@ -1,8 +1,8 @@
 package discordia.nair;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -12,25 +12,26 @@ import com.badlogic.gdx.math.Vector2;
 public class MyInput implements InputProcessor {
 
     int width, height, state, finger;
-    Hoglin player;
-    Vector2 direction, confirmed;
+    Creature player;
+    Vector2 direction;
+    float fixedSpeedX, fixedSpeedY;
 
-    public MyInput(int width, int height, Hoglin player){
+    public MyInput(int width, int height, Creature player){
         this.width = width;
         this.height = height;
         this.player = player;
         state = finger = 0;
         direction = new Vector2(0, 0);
+        fixedSpeedX = 5;
+        fixedSpeedY = 3;
     }
 
-    public void poll(Level level, OrthographicCamera camera){
-        confirmed = level.collide(camera, direction);
-        player.move(confirmed);
+    public void poll(Level level){
+        player.move(level.collide(direction, player.posX, player.posY));
     }
 
 
     public Vector2 getDirection(int x, int y){
-
         direction.x = x*16/Gdx.graphics.getWidth() - width/2 +.5f;
         direction.y = -y*9/Gdx.graphics.getHeight() + height/2;
 
@@ -39,11 +40,41 @@ public class MyInput implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        switch (keycode){
+            case Input.Keys.UP:
+                direction.y = fixedSpeedY;
+                break;
+            case Input.Keys.RIGHT:
+                direction.x = fixedSpeedX;
+                break;
+            case Input.Keys.DOWN:
+                direction.y = -fixedSpeedY;
+                break;
+            case Input.Keys.LEFT:
+                direction.x = -fixedSpeedX;
+                break;
+        }
+
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        switch (keycode){
+            case Input.Keys.UP:
+                direction.y = 0;
+                break;
+            case Input.Keys.RIGHT:
+                direction.x = 0;
+                break;
+            case Input.Keys.DOWN:
+                direction.y = 0;
+                break;
+            case Input.Keys.LEFT:
+                direction.x = 0;
+                break;
+        }
+
         return false;
     }
 
