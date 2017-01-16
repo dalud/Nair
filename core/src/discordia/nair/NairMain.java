@@ -24,7 +24,7 @@ public class NairMain extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
 		player = new Hoglin();
-		input = new MyInput(resoX/resoX*16, resoY/resoY*9, player);
+		input = new MyInput(resoX, resoY, player);
 		Gdx.input.setInputProcessor(input);
 		level = new Level();
 		sili = new Silitoid();

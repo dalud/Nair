@@ -32,8 +32,10 @@ public class MyInput implements InputProcessor {
 
 
     public Vector2 getDirection(int x, int y){
-        direction.x = x*16/Gdx.graphics.getWidth() - width/2 +.5f;
-        direction.y = -y*9/Gdx.graphics.getHeight() + height/2;
+
+        //LUODAAN VEKTORI, JONKA X-MAX = 8 ja Y-MAX = 4 (16:9)
+        direction.x = (x - width/2)*8 / (width/2);
+        direction.y = -(y - height/2)*5 / (height/2);
 
         return direction;
     }

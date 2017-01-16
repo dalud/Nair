@@ -15,7 +15,6 @@ public class Silitoid extends Creature {
         posX = 700;
         posY = 400;
         idleAnimSpeed = .3f;
-        moveSpeed = 3;
         dimensions = new int[]{18, 1, 9};
     }
 

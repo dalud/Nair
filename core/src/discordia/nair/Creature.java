@@ -17,8 +17,9 @@ import java.text.DecimalFormatSymbols;
 public abstract class Creature {
     private TextureRegion currentFrame;
     Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
-    float stateTime, moveSpeed, idleAnimSpeed, frameT;
+    float stateTime, idleAnimSpeed;
     int state, posX, posY;
+
     int[] dimensions;   /*  0 = x
                             1 = y
                             2 = yPositive */
@@ -46,23 +47,30 @@ public abstract class Creature {
         float y = direction.y;
 
         //TÄSSÄ TSEKATAAN SUUNTA JA MÄÄRÄTÄÄN ANIMSHEETTI SEN MUKAAN
-        if(x>0 && y>=0){
+
+        //SEKTORI UP
+        if(y >= 1){
             if(x > y) state = 2;
+            else if(x<0 && -x>y) state = 4;
             else state = 1;
         }
-        else if(x>=0 && y<0){
-            y = -y;
-            if(x > y) state = 2;
+        //SEKTORI RIGHT
+        else if(x >= 1){
+            if(y > x) state = 1;
+            else if(y<0 && -y>x) state = 3;
+            else state = 2;
+        }
+        //SEKTORI DOWN
+        else if(y <= -1){
+            if(x > -y) state = 2;
+            else if(x < y) state = 4;
             else state = 3;
         }
-        else if(x<0 && y<=0){
-            if(x < y) state = 4;
-            else state = 3;
-        }
-        else if(x<=0 && y>0){
-            x = -x;
-            if(x > y) state = 4;
-            else state = 1;
+        //SEKTORI LEFT
+        else if(x <= -1){
+            if(y < x) state = 3;
+            else if(y > -x) state = 1;
+            else state = 4;
         }
         else state = 0;
 
@@ -84,13 +92,59 @@ public abstract class Creature {
                 break;
         }
 
-        this.anim(direction, animSheet);
-        posX += Math.round(direction.x/16*moveSpeed);
-        posY += Math.round(direction.y/9*moveSpeed);
+        //SKAALATAAN INPUT-VEKTORI LIIKKEEKSI: X = 1 - 3, Y = 1 - 2 !!!TÄMÄ TÄYTYY KYLLÄ TEHÄ DELTATIMELLÄ EIKÄ FPS:N MUKAAN!!! (joskus...)
+        if(state != 0) {
+            switch ((int)direction.x){
+                case 1: case 2:
+                    posX += 1;
+                    break;
+                case 3:case 4:case 5:case 6:
+                    posX += 2;
+                    break;
+                case 7:
+                    posX += 3;
+                    break;
+                case -1: case -2:
+                    posX += -1;
+                    break;
+                case -3:case -4:case -5:case -6:
+                    posX += -2;
+                    break;
+                case -7:
+                    posX += -3;
+                    break;
+            }
+            switch ((int)direction.y){
+                case 1:case 2:
+                    posY += 1;
+                    break;
+                case 3:case 4:
+                    posY += 2;
+                    break;
+                case -1:case -2:
+                    posY += -1;
+                    break;
+                case -3:case -4:
+                    posY += -2;
+                    break;
+            }
+        }
+
+        //SÄÄDETÄÄN ANIMAATIONOPEUS LIIKEVEKTORIN MUKAAN (kuinkahan raskaita nuo sqrtit on. pitääkö käyttää likiarvoja?)
+        float speed;
+        //WALK
+        if(direction.len() >= 1 && direction.len() < Math.sqrt(8)) speed = .5f;
+        //JOG
+        else if (direction.len() >= Math.sqrt(8) && direction.len() < Math.sqrt(45)) speed = .3f;
+        //RUN
+        else if (direction.len() >= Math.sqrt(45)) speed = .2f;
+
+        else speed = 1;
+
+        this.anim(animSheet, speed);
     }
 
-    public void anim(Vector2 direction, Texture animSheet) {
-
+    public void anim(Texture animSheet, float speed) {
         int frame_cols = 4;
         int frame_rows = 1;
         float tick = Gdx.graphics.getDeltaTime();
@@ -98,10 +152,6 @@ public abstract class Creature {
         Animation anim;
 
         TextureRegion[] animFrames;
-
-        //TÄSSÄ MÄÄRÄTÄÄN ANIMAATION NOPEUS LIIKEVEKTORIN MUKAAN
-        frameT = Float.parseFloat(df.format(idleAnimSpeed - (direction.len()/9*idleAnimSpeed)));
-        if(frameT < .1) frameT = .1f;
 
         TextureRegion[][] tmp = TextureRegion.split(animSheet, animSheet.getWidth()/frame_cols, animSheet.getHeight()/frame_rows);
         animFrames = new TextureRegion[frame_cols * frame_rows];
@@ -111,7 +161,7 @@ public abstract class Creature {
                 animFrames[index++] = tmp[i][j];
             }
         }
-        anim = new Animation(frameT, animFrames);
+        anim = new Animation(idleAnimSpeed*speed, animFrames);
         stateTime += tick;
         currentFrame = anim.getKeyFrame(stateTime, true);
     }

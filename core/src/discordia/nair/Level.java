@@ -41,8 +41,8 @@ public class Level {
 
     public Vector2 collide(Vector2 direction, int posX, int posY, int[] dims){
 
-        int dx = Math.round(direction.x);
-        int dy = Math.round(direction.y);
+        float dx = direction.x;
+        float dy = direction.y;
         int state = 0;
 
         //MÄÄRÄTÄÄN STATE/SUUNTA MISTÄ KOLLISIOTA TSEKATAAN
@@ -97,7 +97,6 @@ public class Level {
                 confirmed = direction;
                 break;
         }
-
         return confirmed;
     }
 }
