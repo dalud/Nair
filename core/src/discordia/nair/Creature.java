@@ -24,8 +24,8 @@ public abstract class Creature {
                             1 = y
                             2 = yPositive */
 
-    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-    DecimalFormat df = new DecimalFormat("0.0");
+    //DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+    //DecimalFormat df = new DecimalFormat("0.0");
 
     public Creature() {
         stateTime = 0;
@@ -34,8 +34,13 @@ public abstract class Creature {
         dimensions = new int[3];
 
         //LOKALISAATIOSTA JOHTUVA IDIOT CHECK
-        dfs.setDecimalSeparator('.');
-        df.setDecimalFormatSymbols(dfs);
+        //dfs.setDecimalSeparator('.');
+        //df.setDecimalFormatSymbols(dfs);
+    }
+
+    public void setPosition(int x, int y){
+        posX = x;
+        posY = y;
     }
 
     public void draw(SpriteBatch batch) {

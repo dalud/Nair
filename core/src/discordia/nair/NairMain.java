@@ -23,24 +23,21 @@ public class NairMain extends ApplicationAdapter {
 		resoY = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		player = new Hoglin();
+		player = new Silitoid();
 		input = new MyInput(resoX, resoY, player);
 		Gdx.input.setInputProcessor(input);
 		level = new Level();
-		sili = new Silitoid();
 	}
 
 	@Override
 	public void render () {
 		camera.update();
 		input.poll(level);
-		sili.operate();
 		batch.setProjectionMatrix(camera.combined);
 		camera.position.set(player.posX, player.posY, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		level.draw(batch, 1);
-		sili.draw(batch);
 		player.draw(batch);
 		level.draw(batch, 2);
 		batch.end();
