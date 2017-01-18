@@ -12,6 +12,8 @@ public class Hoglin extends Creature {
         posX = 1450;
         posY = 475;
         idleAnimSpeed = .4f;
+        walk = .5f;
+        run = .3f;
         dimensions = new int[] {16, 20, 1};
 
         idle = new Texture("Hoglin/Hoglin_idle.png");

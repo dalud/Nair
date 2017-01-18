@@ -15,7 +15,6 @@ public class NairMain extends ApplicationAdapter {
 	Creature player;
 	MyInput input;
 	Level level;
-	Silitoid sili;
 
 	@Override
 	public void create () {
@@ -23,7 +22,7 @@ public class NairMain extends ApplicationAdapter {
 		resoY = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		player = new Silitoid();
+		player = new Hoglin();
 		input = new MyInput(resoX, resoY, player);
 		Gdx.input.setInputProcessor(input);
 		level = new Level();

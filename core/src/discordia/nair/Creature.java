@@ -17,7 +17,7 @@ import java.text.DecimalFormatSymbols;
 public abstract class Creature {
     private TextureRegion currentFrame;
     Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
-    float stateTime, idleAnimSpeed;
+    float stateTime, idleAnimSpeed, speedScalar, walk, run;
     int state, posX, posY;
 
     int[] dimensions;   /*  0 = x
@@ -48,7 +48,6 @@ public abstract class Creature {
     }
 
     public void move(Vector2 direction) {
-
         float x = direction.x;
         float y = direction.y;
 
@@ -79,6 +78,11 @@ public abstract class Creature {
             else state = 4;
         } else state = 0;
 
+        setAnimSheet(state);
+        travel(state, direction);
+    }
+
+    public void setAnimSheet(int state) {
         switch (state) {
             case 0:
                 animSheet = idle;
@@ -96,63 +100,63 @@ public abstract class Creature {
                 animSheet = walkLeft;
                 break;
         }
-
+    }
+    public void travel(int state, Vector2 direction) {
         //SKAALATAAN INPUT-VEKTORI LIIKKEEKSI: X = 1 - 3, Y = 1 - 2 !!!TÄMÄ TÄYTYY KYLLÄ TEHÄ DELTATIMELLÄ EIKÄ FPS:N MUKAAN!!! (joskus...)
         if (state != 0) {
-            switch ((int) direction.x) {
+            switch ((int)direction.x) {
                 case 1:
                 case 2:
                 case 3:
-                    posX += 1;
-                    break;
                 case 4:
+                    posX += 1;
+                    speedScalar = walk;
+                    break;
                 case 5:
                 case 6:
                 case 7:
                     posX += 2;
+                    speedScalar = run;
                     break;
                 case -1:
                 case -2:
                 case -3:
-                    posX += -1;
-                    break;
                 case -4:
+                    posX += -1;
+                    speedScalar = walk;
+                    break;
                 case -5:
                 case -6:
                 case -7:
                     posX += -2;
+                    speedScalar = run;
                     break;
             }
-            switch ((int) direction.y) {
+            switch ((int)direction.y) {
                 case 1:
                 case 2:
                 case 3:
                     posY += 1;
+                    speedScalar = walk;
                     break;
                 case 4:
                     posY += 2;
+                    speedScalar = run;
                     break;
                 case -1:
                 case -2:
                 case -3:
                     posY += -1;
+                    speedScalar = walk;
                     break;
                 case -4:
                     posY += -2;
+                    speedScalar = run;
                     break;
             }
-        }
+        }else speedScalar = 1;
 
-        //SÄÄDETÄÄN ANIMAATIONOPEUS LIIKEVEKTORIN MUKAAN (kuinkahan raskaita nuo sqrtit on. pitääkö käyttää likiarvoja?)
-        float speed;
-        //WALK
-        if (direction.len() >= 1 && direction.len() < Math.sqrt(11)) speed = .5f;
-        //JOG
-        else if (direction.len() >= Math.sqrt(11)) speed = .3f;
-
-        else speed = 1;
-
-        this.anim(animSheet, speed);
+        this.anim(animSheet, speedScalar);
     }
 
     public void anim(Texture animSheet, float speed) {
