@@ -1,6 +1,5 @@
 package discordia.nair;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -23,16 +22,16 @@ public class MyInput implements InputProcessor {
         state = finger = 0;
         direction = new Vector2(0, 0);
         fixedSpeedX = 5;
-        fixedSpeedY = 3;
+        fixedSpeedY = 4;
     }
 
-    public void poll(Level level){
-        player.move(level.collide(direction, player.posX, player.posY, player.dimensions));
+    public void poll(){
+        player.move(player.collide(direction));
+
     }
 
 
     public Vector2 getDirection(int x, int y){
-
         //LUODAAN VEKTORI, JONKA X-MAX = 8 ja Y-MAX = 4 (16:9)
         direction.x = (x - width/2)*8 / (width/2);
         direction.y = -(y - height/2)*5 / (height/2);
@@ -56,7 +55,6 @@ public class MyInput implements InputProcessor {
                 direction.x = -fixedSpeedX;
                 break;
         }
-
         return false;
     }
 
@@ -76,7 +74,6 @@ public class MyInput implements InputProcessor {
                 direction.x = 0;
                 break;
         }
-
         return false;
     }
 

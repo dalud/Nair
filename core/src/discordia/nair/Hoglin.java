@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Hoglin extends Creature {
 
-    public Hoglin(){
+    public Hoglin(Level level){
+        super(level);
         posX = 1450;
         posY = 475;
         idleAnimSpeed = .4f;
@@ -21,6 +22,5 @@ public class Hoglin extends Creature {
         walkFront = new Texture("Hoglin/Hoglin_walkFront.png");
         walkLeft = new Texture("Hoglin/Hoglin_walkLeft.png");
         walkRight = new Texture("Hoglin/Hoglin_walkRight.png");
-
     }
 }

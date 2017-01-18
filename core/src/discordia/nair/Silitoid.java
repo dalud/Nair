@@ -10,7 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Silitoid extends Creature {
 
-    public Silitoid() {
+    public Silitoid(Level level) {
+        super(level);
         idle = new Texture(Gdx.files.internal("Silitoid/silitoid_idle.png"));
         walkFront = walkRight = new Texture(Gdx.files.internal("Silitoid/Silitoid_walkRight.png"));
         walkBack = new Texture(Gdx.files.internal("Silitoid/Silitoid_walkBack.png"));

@@ -1,6 +1,7 @@
 package discordia.nair;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +20,8 @@ public abstract class Creature {
     Texture idle, walkBack, walkFront, walkLeft, walkRight, animSheet;
     float stateTime, idleAnimSpeed, speedScalar, walk, run;
     int state, posX, posY;
-
+    Pixmap obstacles;
+    Vector2 confirmed;
     int[] dimensions;   /*  0 = x
                             1 = y
                             2 = yPositive */
@@ -27,11 +29,13 @@ public abstract class Creature {
     //DecimalFormatSymbols dfs = new DecimalFormatSymbols();
     //DecimalFormat df = new DecimalFormat("0.0");
 
-    public Creature() {
+    public Creature(Level level) {
         stateTime = 0;
         state = 0;
         animSheet = idle;
         dimensions = new int[3];
+        obstacles = level.obstacles;
+        confirmed = new Vector2(0,0);
 
         //LOKALISAATIOSTA JOHTUVA IDIOT CHECK
         //dfs.setDecimalSeparator('.');
@@ -47,11 +51,71 @@ public abstract class Creature {
         batch.draw(currentFrame, posX - 32, posY - 32);
     }
 
+    public Vector2 collide(Vector2 direction){
+        float dx = direction.x;
+        float dy = direction.y;
+        int state = 0;
+
+        //MÄÄRÄTÄÄN STATE/SUUNTA MISTÄ KOLLISIOTA TSEKATAAN
+        if(dx > 0){
+            if(dy >= 0) state = 1;
+            else state = 2;
+        }
+        else if(dx < 0){
+            if(dy <= 0) state = 3;
+            else state = 4;
+        }
+        else if(dx == 0){
+            if(dy < 0) state = 3;
+            else if(dy > 0) state = 4;
+        }
+
+        //TÄSSÄ ITSE KOLLISIO STATEN/SUUNNAN MUKAAN
+        switch(state) {
+            case 1:
+                if (obstacles.getPixel(posX + dimensions[0], posY) < 1) confirmed.x = 0;
+                else confirmed.x = dx;
+
+                if (obstacles.getPixel(posX, posY + dimensions[2]) < 1) confirmed.y = 0;
+                else confirmed.y = dy;
+                break;
+
+            case 2:
+                if (obstacles.getPixel(posX + dimensions[0], posY) < 1) confirmed.x = 0;
+                else confirmed.x = dx;
+
+                if (obstacles.getPixel(posX, posY - dimensions[1]) < 1) confirmed.y = 0;
+                else confirmed.y = dy;
+                break;
+
+            case 3:
+                if (obstacles.getPixel(posX - dimensions[0], posY) < 1) confirmed.x = 0;
+                else confirmed.x = dx;
+
+                if (obstacles.getPixel(posX, posY - dimensions[1]) < 1) confirmed.y = 0;
+                else confirmed.y = dy;
+                break;
+
+            case 4:
+                if (obstacles.getPixel(posX - dimensions[0], posY) < 1) confirmed.x = 0;
+                else confirmed.x = dx;
+
+                if (obstacles.getPixel(posX, posY + dimensions[2]) < 1) confirmed.y = 0;
+                else confirmed.y = dy;
+                break;
+
+            default:
+                confirmed = direction;
+                break;
+        }
+        return confirmed;
+    }
+
     public void move(Vector2 direction) {
         float x = direction.x;
         float y = direction.y;
 
-        //TÄSSÄ TSEKATAAN SUUNTA JA MÄÄRÄTÄÄN ANIMSHEETTI SEN MUKAAN
+        //TÄSSÄ TSEKATAAN SUUNTA
 
         //SEKTORI UP
         if (y >= 1) {
@@ -78,7 +142,9 @@ public abstract class Creature {
             else state = 4;
         } else state = 0;
 
+        //JA MÄÄRÄTÄÄN ANIMSHEETTI SEN MUKAAN
         setAnimSheet(state);
+        //JA LIIKUTAAN
         travel(state, direction);
     }
 
@@ -102,7 +168,7 @@ public abstract class Creature {
         }
     }
     public void travel(int state, Vector2 direction) {
-        //SKAALATAAN INPUT-VEKTORI LIIKKEEKSI: X = 1 - 3, Y = 1 - 2 !!!TÄMÄ TÄYTYY KYLLÄ TEHÄ DELTATIMELLÄ EIKÄ FPS:N MUKAAN!!! (joskus...)
+        //SKAALATAAN INPUT-VEKTORI LIIKE/ANIMAATIONOPEUDEKSI !!!TÄMÄ TÄYTYY KYLLÄ TEHÄ DELTATIMELLÄ EIKÄ FPS:N MUKAAN!!! (joskus...)
         if (state != 0) {
             switch ((int)direction.x) {
                 case 1:

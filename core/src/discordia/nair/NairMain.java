@@ -15,6 +15,7 @@ public class NairMain extends ApplicationAdapter {
 	Creature player;
 	MyInput input;
 	Level level;
+	AI ai;
 
 	@Override
 	public void create () {
@@ -22,22 +23,26 @@ public class NairMain extends ApplicationAdapter {
 		resoY = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		player = new Hoglin();
+		level = new Level();
+		player = new Hoglin(level);
 		input = new MyInput(resoX, resoY, player);
 		Gdx.input.setInputProcessor(input);
-		level = new Level();
+
+		ai = new AI(level);
 	}
 
 	@Override
 	public void render () {
 		camera.update();
-		input.poll(level);
+		input.poll();
+		ai.operate(player);
 		batch.setProjectionMatrix(camera.combined);
 		camera.position.set(player.posX, player.posY, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		level.draw(batch, 1);
 		player.draw(batch);
+		ai.draw(batch);
 		level.draw(batch, 2);
 		batch.end();
 	}
