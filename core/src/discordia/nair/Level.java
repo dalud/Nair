@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -14,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class Level {
-    Texture YigL1, YigL2;
+    Texture YigL1, YigL2, ui, crosshair;
     Pixmap obstacles, deathScreen;
     Music bardic;
     Sound deathScream;
@@ -22,9 +23,12 @@ public class Level {
     SpriteBatch batch;
     OrthographicCamera camera;
 
+    Rectangle touch, resetButton;
+
     public Level(int x, int y, SpriteBatch batch, OrthographicCamera camera){
         YigL1 = new Texture(Gdx.files.internal("ForestOfYig/FoYL1.png"));
         YigL2 = new Texture(Gdx.files.internal("ForestOfYig/FoYL2.png"));
+        crosshair = new Texture(Gdx.files.internal("UI/crosshair.png"));
         obstacles = new Pixmap(Gdx.files.internal("ForestOfYig/collision.png"));
         deathScream = Gdx.audio.newSound(Gdx.files.internal("sfx/inhumaneScream.mp3"));
         width = x;
@@ -44,6 +48,13 @@ public class Level {
             case 2:
                 batch.draw(YigL2, 0, 0);
                 break;
+            case 3:
+                if(ui != null) batch.draw(ui, 0, 0);
+                //FOR DEBUGGING'S SAKE
+                //if(touch != null) batch.draw(crosshair, touch.getX()-touch.getWidth()/2, height-touch.getY()-touch.getHeight()/2);
+                break;
+
+
         }
     }
 
@@ -64,10 +75,9 @@ public class Level {
         Pixmap dead = new Pixmap(Gdx.files.internal("UI/dead.png"));
         deathScreen.drawPixmap(dead, width/2-dead.getWidth()/2, height/2-dead.getHeight());
         Pixmap again = new Pixmap(Gdx.files.internal("UI/again.png"));
-        deathScreen.drawPixmap(again, width/2-again.getWidth()/2, height-height/3);
-
-
-        YigL2 = new Texture(deathScreen);
+        resetButton = new Rectangle(width/2-again.getWidth()/2, height-height/3, again.getWidth(), again.getHeight());
+        deathScreen.drawPixmap(again, (int)resetButton.getX(), (int)resetButton.getY());
+        ui = new Texture(deathScreen);
 
 
         /*float slider = 0f; KAUNIS AJATUS, MUTTA JOUTUNEE KÄYTTÄÄMÄÄN SHAPERENDERIÄ TAI ANIMAATIOTA
@@ -77,5 +87,10 @@ public class Level {
 
             slider += .1f;
         }*/
+    }
+
+    public void getTouch(int x, int y){
+        touch = new Rectangle(x, y, crosshair.getWidth(), crosshair.getHeight());
+        if(touch.overlaps(resetButton)) NairMain.reset = true;
     }
 }

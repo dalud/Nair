@@ -20,7 +20,7 @@ public class Silitoid extends Creature {
         posY = 400;
         idleAnimSpeed = .2f;
         walk = .5f;
-        run = .3f;
+        run = .5f;
         dimensions = new int[]{20, 8, 1};
     }
 
@@ -31,25 +31,19 @@ public class Silitoid extends Creature {
         float x = direction.x;
         float y = direction.y;
 
-        //TÄSSÄ TSEKATAAN SUUNTA JA MÄÄRÄTÄÄN ANIMSHEETTI SEN MUKAAN
-
-        //SEKTORI UP
         if (y >= 1) {
             state = 1;
         }
-        //SEKTORI RIGHT
         else if (x >= 1) {
             if (y > x) state = 1;
             else if (y < 0 && -y > x) state = 3;
             else state = 2;
         }
-        //SEKTORI DOWN
         else if (y <= -1) {
             if (x > -y) state = 2;
             else if (x < y) state = 4;
             else state = 3;
         }
-        //SEKTORI LEFT
         else if (x <= -1) {
             if (y < x) state = 3;
             else if (y > -x) state = 1;

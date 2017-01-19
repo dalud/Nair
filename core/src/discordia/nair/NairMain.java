@@ -44,7 +44,6 @@ public class NairMain extends ApplicationAdapter {
 		//REALLY?
 		if(!gameOver){
 			input.poll();
-			System.out.println(input.finger);
 			camera.position.set(player.posX, player.posY, 0);
 		}
 
@@ -54,7 +53,7 @@ public class NairMain extends ApplicationAdapter {
 		player.draw(batch);
 		ai.draw(batch);
 		level.draw(2);
-		menu.draw(batch);
+		level.draw(3);
 		batch.end();
 
 		//REALLY?
