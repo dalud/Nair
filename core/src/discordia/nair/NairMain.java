@@ -14,36 +14,59 @@ public class NairMain extends ApplicationAdapter {
 	static int resoY;
 	Creature player;
 	MyInput input;
+	static MenuInput menu;
 	Level level;
 	AI ai;
+	static boolean gameOver, reset;  //REALLY?
 
 	@Override
-	public void create () {
+	public void create() {
 		resoX = Gdx.graphics.getWidth();
 		resoY = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(resoX/scale, resoY/scale);
-		level = new Level();
+		level = new Level(resoX, resoY, batch, camera);
 		player = new Hoglin(level);
 		input = new MyInput(resoX, resoY, player);
+		menu = new MenuInput(level);
 		Gdx.input.setInputProcessor(input);
-
+		gameOver = reset = false;
 		ai = new AI(level);
 	}
 
 	@Override
 	public void render () {
 		camera.update();
-		input.poll();
 		ai.operate(player);
+
 		batch.setProjectionMatrix(camera.combined);
-		camera.position.set(player.posX, player.posY, 0);
+
+		//REALLY?
+		if(!gameOver){
+			input.poll();
+			System.out.println(input.finger);
+			camera.position.set(player.posX, player.posY, 0);
+		}
+
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		level.draw(batch, 1);
+		level.draw(1);
 		player.draw(batch);
 		ai.draw(batch);
-		level.draw(batch, 2);
+		level.draw(2);
+		menu.draw(batch);
 		batch.end();
+
+		//REALLY?
+		if(reset){
+			level = new Level(resoX, resoY, batch, camera);
+			camera.setToOrtho(false, resoX/scale, resoY/scale);
+			player = new Hoglin(level);
+			input = new MyInput(resoX, resoY, player);
+			input.finger = 0;
+			Gdx.input.setInputProcessor(input);
+			gameOver = reset = false;
+			ai = new AI(level);
+		}
 	}
 }

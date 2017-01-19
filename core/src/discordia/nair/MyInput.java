@@ -15,6 +15,7 @@ public class MyInput implements InputProcessor {
     Vector2 direction;
     float fixedSpeedX, fixedSpeedY;
 
+
     public MyInput(int width, int height, Creature player){
         this.width = width;
         this.height = height;
@@ -23,11 +24,11 @@ public class MyInput implements InputProcessor {
         direction = new Vector2(0, 0);
         fixedSpeedX = 5;
         fixedSpeedY = 4;
+
     }
 
     public void poll(){
         player.move(player.collide(direction));
-
     }
 
 
@@ -96,6 +97,7 @@ public class MyInput implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         finger--;
+        if(finger < 0) finger = 0; //TSEKKAUS, KOSKA SAATTAA MENNÄ MIINUKSELLE KUN INPUTTEJA VAIHETAAN
 
         if(finger == 0) {
             direction.x = 0;
